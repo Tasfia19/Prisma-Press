@@ -7,23 +7,19 @@ import express, {
 } from "express";
 import httpStatus from "http-status-codes";
 
+export const catchAsync = (fn: RequestHandler) => {
+	// async (req, res, next) => {
 
+	//     const payload = req.body;
 
+	//     const user = await usersService.registerUserIntoDb(payload);
 
+	//     res.status(201).json(...);
 
-export const catchAsync = (fn: RequestHandler) => { 
-// async (req, res, next) => {
-
-//     const payload = req.body;
-
-//     const user = await usersService.registerUserIntoDb(payload);
-
-//     res.status(201).json(...);
-
-// } this is the try{fn} 
+	// } this is the try{fn}
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			await fn(req, res, next);
+			return Promise.resolve(fn(req, res, next)).catch((err) => next(err));
 		} catch (error: any) {
 			res.status(httpStatus.BAD_REQUEST).json({
 				success: false,
